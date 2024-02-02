@@ -26,6 +26,7 @@ def create_tables(cursor):
 # Query the database.
 # You should not need to edit anything in this function
 def query_sql(cursor, query):
+    # print("Executing SQL query:", query)
     cursor.execute(query)
     return cursor
 
@@ -38,20 +39,25 @@ def add_new_job(cursor, jobdetails):
     query = cursor.execute("INSERT INTO jobs( Description, Created_at " ") "
                "VALUES(%s,%s)", (  description, date))
      # %s is what is needed for Mysqlconnector as SQLite3 uses ? the Mysqlconnector uses %s
-    return query_sql(cursor, query)
+    cursor.execute(query, (description, date))
+    return cursor
 
 
 # Check if new job
 def check_if_job_exists(cursor, jobdetails):
     ##Add your code here
-    query = "UPDATE"
-    return query_sql(cursor, query)
+    description = html2text.html2text(jobdetails['description'])
+    query = f'SELECT * FROM jobs WHERE description = %s'
+    cursor.execute(query, (description,))
+    return cursor
 
 # Deletes job
 def delete_job(cursor, jobdetails):
     ##Add your code here
-    query = "UPDATE"
-    return query_sql(cursor, query)
+    description = html2text.html2text(jobdetails['description'])
+    query = f'DELETE FROM jobs WHERE description = %s'
+    cursor.execute(query, (description,))
+    return cursor
 
 
 # Grab new jobs from a website, Parses JSON code and inserts the data into a list of dictionaries do not need to edit
@@ -79,8 +85,11 @@ def add_or_delete_job(jobpage, cursor):
         is_job_found = len(
         cursor.fetchall()) > 0  # https://stackoverflow.com/questions/2511679/python-number-of-rows-affected-by-cursor-executeselect
         if is_job_found:
-
+            delete_job(cursor, jobdetails)
+            print(f'Existing Character found in DB {jobdetails["description"]}')
         else:
+            add_new_job(cursor, jobdetails)
+            print(f'New Character added to DB {jobdetails["description"]}')
             # INSERT JOB
             # Add in your code here to notify the user of a new posting. This code will notify the new user
 
@@ -94,7 +103,7 @@ def main():
     conn = connect_to_sql()
     cursor = conn.cursor()
     create_tables(cursor)
-
+    # jobhunt(cursor)
     while (1):  # Infinite Loops. Only way to kill it is to crash or manually crash it. We did this as a background process/passive scraper
         jobhunt(cursor)
         time.sleep(21600)  # Sleep for 1h, this is ran every hour because API or web interfaces have request limits. Your reqest will get blocked.
