@@ -86,10 +86,11 @@ def add_or_delete_job(jobpage, cursor):
         cursor.fetchall()) > 0  # https://stackoverflow.com/questions/2511679/python-number-of-rows-affected-by-cursor-executeselect
         if is_job_found:
             delete_job(cursor, jobdetails)
-            print(f'Existing Character found in DB {jobdetails["description"]}')
+            print(f'Existing Jobs found in DB {jobdetails["id"]}')
+
         else:
             add_new_job(cursor, jobdetails)
-            print(f'New Character added to DB {jobdetails["description"]}')
+            print(f'New Jobs added to DB {jobdetails["description"]}')
             # INSERT JOB
             # Add in your code here to notify the user of a new posting. This code will notify the new user
 
@@ -106,7 +107,7 @@ def main():
     # jobhunt(cursor)
     while (1):  # Infinite Loops. Only way to kill it is to crash or manually crash it. We did this as a background process/passive scraper
         jobhunt(cursor)
-        time.sleep(21600)  # Sleep for 1h, this is ran every hour because API or web interfaces have request limits. Your reqest will get blocked.
+        time.sleep(10)  # Sleep for 1h, this is ran every hour because API or web interfaces have request limits. Your reqest will get blocked.
 
 
 # Sleep does a rough cycle count, system is not entirely accurate
