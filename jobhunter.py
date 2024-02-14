@@ -1,11 +1,15 @@
-import datetime
 
-import mysql.connector
-import time
+# Yeabsira Moges
+# CNE 340 Winter 2024
+# 02-13-2024
+
+
 import json
-import requests
-from datetime import date
+import time
+
 import html2text
+import mysql.connector
+import requests
 
 
 # Connect to database
