@@ -1,7 +1,6 @@
 
-# Project Title and Description
+# Job Hunter
 
-**Job Hunter**
 
 **Description:**
 
