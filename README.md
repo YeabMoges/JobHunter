@@ -34,7 +34,7 @@ Retrieves job listings from: `https://remotive.io/api/remote-jobs`
 3. Configure the MySQL database connection settings in the script.
 4. Run the script using Python:
     ```
-    python job_hunter.py
+    jobhunter.py
     ```
 
 
